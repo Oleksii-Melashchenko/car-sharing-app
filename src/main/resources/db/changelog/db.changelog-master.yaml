@@ -1,9 +1,9 @@
 databaseChangeLog:
     - include:
-        file: src/main/resources/db/changelog/changes/001-create-car-table.yaml
+        file: db/changelog/changes/001-create-car-table.yaml
     - include:
-        file: src/main/resources/db/changelog/changes/002-create-user-table.yaml
+        file: db/changelog/changes/002-create-user-table.yaml
     - include:
-        file: src/main/resources/db/changelog/changes/003-create-rental-table.yaml
+        file: db/changelog/changes/003-create-rental-table.yaml
     - include:
-        file: src/main/resources/db/changelog/changes/004-create-payment-table.yaml
+        file: db/changelog/changes/004-create-payment-table.yaml
