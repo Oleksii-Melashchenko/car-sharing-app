@@ -15,14 +15,17 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
+@SQLDelete(sql = "UPDATE users SET isDeleted = true WHERE id = ?")
+@SQLRestriction(value = "is_deleted = FALSE")
 @Entity
 @Getter
 @Setter
 @Accessors(chain = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
@@ -36,6 +39,9 @@ public class User {
 
     @Column(nullable = false)
     String password;
+
+    @Column(nullable = false)
+    boolean isDeleted = false;
 
     @ManyToMany
     @JoinTable(

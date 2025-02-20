@@ -1,5 +1,6 @@
 package com.clozex.carsharingapp.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -14,7 +15,11 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
+@SQLDelete(sql = "UPDATE payments SET isDeleted = true WHERE id = ?")
+@SQLRestriction(value = "is_deleted = FALSE")
 @Entity
 @Getter
 @Setter
@@ -29,15 +34,14 @@ public class Payment {
     @JoinColumn(name = "rental_id", nullable = false)
     Rental rental;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    User user;
-
     @Enumerated(EnumType.STRING)
     Status status;
 
     @Enumerated(EnumType.STRING)
     PaymentType paymentType;
+
+    @Column(nullable = false)
+    boolean isDeleted = false;
 
     String sessionUrl;
 
