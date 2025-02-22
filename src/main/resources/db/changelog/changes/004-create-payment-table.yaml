@@ -56,3 +56,9 @@ databaseChangeLog:
             referencedTableName: rentals
             referencedColumnNames: id
             constraintName: fk_payments_rentals
+        - addForeignKeyConstraint:
+            baseTableName: payments
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_payments_users

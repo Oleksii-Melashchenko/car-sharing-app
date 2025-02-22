@@ -34,6 +34,10 @@ public class Payment {
     @JoinColumn(name = "rental_id", nullable = false)
     Rental rental;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    User user;
+
     @Enumerated(EnumType.STRING)
     Status status;
 
