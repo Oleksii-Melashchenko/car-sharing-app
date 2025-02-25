@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JwtUtil {
-
     private static final String DEFAULT_SECRET =
             "JFHJHFDJHFJKSH5345FJKSHFJKH53453SVNMBZX&WYTUWY7657OUIOFASDFOPAIVJ34242562MLAWJIOQY";
     private static final long DEFAULT_EXPIRATION = 3600000;
