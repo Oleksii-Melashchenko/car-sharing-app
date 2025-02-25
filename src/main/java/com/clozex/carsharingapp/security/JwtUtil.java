@@ -1,5 +1,6 @@
 package com.clozex.carsharingapp.security;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
@@ -7,19 +8,34 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.util.Base64;
 import java.util.Date;
 import java.util.function.Function;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class JwtUtil {
-    @Value("${jwt.expiration}")
-    private long expiration;
+    private static final Dotenv dotenv = Dotenv.configure()
+            .ignoreIfMissing()
+            .load();
     private final Key secret;
+    private final long expiration;
 
-    public JwtUtil(@Value("${jwt.secret}") String secretString) {
-        secret = Keys.hmacShaKeyFor(secretString.getBytes(StandardCharsets.UTF_8));
+    public JwtUtil() {
+        String secretString = getEnvVar("JWT_SECRET", "JFHJHFDJHFJKSH5345FJKSH"
+                + "FJKH53453SVNMBZX&WYTUWY7657OUIOF"
+                + "ASDFOPAIVJ34242562MLAWJIOQY");
+        byte[] keyBytes = Base64.getEncoder().encode(secretString.getBytes(StandardCharsets.UTF_8));
+        this.secret = Keys.hmacShaKeyFor(keyBytes);
+        this.expiration = Long.parseLong(getEnvVar("JWT_EXPIRATION", "3600000"));
+    }
+
+    private static String getEnvVar(String key, String defaultValue) {
+        String value = System.getenv(key);
+        if (value == null) {
+            value = dotenv.get(key);
+        }
+        return (value != null) ? value : defaultValue;
     }
 
     public String generateToken(String username) {
