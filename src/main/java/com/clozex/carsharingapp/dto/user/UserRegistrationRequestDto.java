@@ -30,10 +30,6 @@ public record UserRegistrationRequestDto(
 
         @NotBlank(message = "Last name cannot be empty")
         @Size(max = 255)
-        String lastName,
-
-        @NotBlank(message = "Shipping address cannot be empty")
-        @Size(max = 255)
-        String shippingAddress
+        String lastName
 ) {
 }
