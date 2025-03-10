@@ -3,24 +3,28 @@ package com.clozex.carsharingapp.service.impl;
 import com.clozex.carsharingapp.dto.user.UserRegisterResponseDto;
 import com.clozex.carsharingapp.dto.user.UserRegistrationRequestDto;
 import com.clozex.carsharingapp.dto.user.UserResponseDto;
+import com.clozex.carsharingapp.dto.user.UserUpdateDetailsDto;
 import com.clozex.carsharingapp.exception.RegistrationException;
 import com.clozex.carsharingapp.mapper.UserMapper;
 import com.clozex.carsharingapp.model.Role;
 import com.clozex.carsharingapp.model.User;
+import com.clozex.carsharingapp.repository.user.RoleRepository;
 import com.clozex.carsharingapp.repository.user.UserRepository;
-import com.clozex.carsharingapp.service.RoleService;
 import com.clozex.carsharingapp.service.UserService;
-import java.util.Set;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserServiceImpl implements UserService {
+    private static final String USER_NOT_FOUND = "User not found";
+    private static final String ROLE_NOT_FOUND = "Role not found";
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final RoleService roleService;
+    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -32,14 +36,38 @@ public class UserServiceImpl implements UserService {
         }
         User user = userMapper.toModel(requestDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(Set.of(roleService.findByName(Role.RoleName.ROLE_USER)));
+        user.setRoles(roleRepository.findByName(Role.RoleName.ROLE_USER).orElseThrow(
+                () -> new RuntimeException(ROLE_NOT_FOUND)
+        ));
         return userMapper.toRegisterDto(userRepository.save(user));
     }
 
     @Override
     public UserResponseDto getUserInfo(User user) {
-        User userDto = userRepository.findByEmail(user.getEmail()).orElseThrow();
+        User userDto = userRepository.findByEmail(user.getEmail()).orElseThrow(
+                () -> new RuntimeException(USER_NOT_FOUND)
+        );
         return userMapper.toDto(userDto);
+    }
+
+    @Override
+    public UserResponseDto updateUserInfo(User user, UserUpdateDetailsDto userUpdateDetailsDto) {
+        User userDto = userRepository.findByEmail(user.getEmail()).orElseThrow(
+                () -> new RuntimeException(USER_NOT_FOUND)
+        );
+        userDto.setFirstName(userUpdateDetailsDto.firstName());
+        userDto.setLastName(userUpdateDetailsDto.lastName());
+        return userMapper.toDto(userRepository.save(userDto));
+    }
+
+    @Override
+    public UserResponseDto updateUserRole(Long userId, Long roleId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException(USER_NOT_FOUND));
+        Role newRole = roleRepository.findById(roleId)
+                .orElseThrow(() -> new RuntimeException(ROLE_NOT_FOUND));
+        user.setRoles(newRole);
+        return userMapper.toDto(userRepository.save(user));
     }
 
 }

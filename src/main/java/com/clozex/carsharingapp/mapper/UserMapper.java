@@ -8,28 +8,25 @@ import com.clozex.carsharingapp.dto.user.UserRegistrationRequestDto;
 import com.clozex.carsharingapp.dto.user.UserResponseDto;
 import com.clozex.carsharingapp.model.Role;
 import com.clozex.carsharingapp.model.User;
-import java.util.Collections;
-import java.util.Set;
-import java.util.stream.Collectors;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 @Mapper(config = MapperConfig.class, unmappedTargetPolicy = IGNORE)
 public interface UserMapper {
     User toModel(UserRegistrationRequestDto requestDto);
 
-    @Mapping(target = "roles", source = "roles")
+    @Mapping(target = "role", source = "roles", qualifiedByName = "roleToString")
     UserResponseDto toDto(User user);
 
     UserRegisterResponseDto toRegisterDto(User user);
 
-    default Set<String> map(Set<Role> roles) {
-        if (roles == null) {
-            return Collections.emptySet();
+    @Named("roleToString")
+    default String roleToString(Role role) {
+        if (role == null) {
+            return null;
         }
-        return roles.stream()
-                .map(role -> role.getName()
-                        .toString().replace("ROLE_", ""))
-                .collect(Collectors.toSet());
+        return role.toString().replace("ROLE_", "");
     }
+
 }
