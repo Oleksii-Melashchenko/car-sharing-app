@@ -25,7 +25,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Table(name = "users")
-@SQLDelete(sql = "UPDATE users SET isDeleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE users SET is_deleted = true WHERE id = ?")
 @SQLRestriction(value = "is_deleted = FALSE")
 @Entity
 @Getter
