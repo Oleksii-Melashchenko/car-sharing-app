@@ -29,14 +29,13 @@ public class UserController {
 
     @Operation(summary = "Getting information about the current user")
     @GetMapping("/me")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public UserResponseDto getUserInfo(Authentication authentication) {
         return userService.getUserInfo((User) authentication.getPrincipal());
     }
 
     @Operation(summary = "Updating information about the current user")
     @PatchMapping("/me")
-    @ResponseStatus(HttpStatus.OK)
     public UserResponseDto updateUserInfo(Authentication authentication,
                                           @Valid
                                           @RequestBody UserUpdateDetailsDto userUpdateDetailsDto) {
