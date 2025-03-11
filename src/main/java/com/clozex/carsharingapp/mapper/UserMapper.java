@@ -11,7 +11,9 @@ import com.clozex.carsharingapp.model.Role;
 import com.clozex.carsharingapp.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(config = MapperConfig.class, unmappedTargetPolicy = IGNORE)
 public interface UserMapper {
@@ -30,12 +32,9 @@ public interface UserMapper {
         return role.toString().replace("ROLE_", "");
     }
 
-    default void mapToUpdatedUser(User existingUser, UserUpdateDetailsDto updateDetailsDto) {
-        if (updateDetailsDto.firstName() != null) {
-            existingUser.setFirstName(updateDetailsDto.firstName());
-        }
-        if (updateDetailsDto.lastName() != null) {
-            existingUser.setLastName(updateDetailsDto.lastName());
-        }
-    }
+    @Mapping(target = "firstName", source = "updateDetailsDto.firstName",
+            nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "lastName", source = "updateDetailsDto.lastName",
+            nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateUserFromDto(UserUpdateDetailsDto updateDetailsDto, @MappingTarget User existingUser);
 }
