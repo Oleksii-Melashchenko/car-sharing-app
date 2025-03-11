@@ -6,6 +6,7 @@ import com.clozex.carsharingapp.configuration.MapperConfig;
 import com.clozex.carsharingapp.dto.user.UserRegisterResponseDto;
 import com.clozex.carsharingapp.dto.user.UserRegistrationRequestDto;
 import com.clozex.carsharingapp.dto.user.UserResponseDto;
+import com.clozex.carsharingapp.dto.user.UserUpdateDetailsDto;
 import com.clozex.carsharingapp.model.Role;
 import com.clozex.carsharingapp.model.User;
 import org.mapstruct.Mapper;
@@ -29,4 +30,12 @@ public interface UserMapper {
         return role.toString().replace("ROLE_", "");
     }
 
+    default void mapToUpdatedUser(User existingUser, UserUpdateDetailsDto updateDetailsDto) {
+        if (updateDetailsDto.firstName() != null) {
+            existingUser.setFirstName(updateDetailsDto.firstName());
+        }
+        if (updateDetailsDto.lastName() != null) {
+            existingUser.setLastName(updateDetailsDto.lastName());
+        }
+    }
 }

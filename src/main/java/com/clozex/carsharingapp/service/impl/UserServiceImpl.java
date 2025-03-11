@@ -56,12 +56,7 @@ public class UserServiceImpl implements UserService {
         User userDto = userRepository.findByEmail(user.getEmail()).orElseThrow(
                 () -> new EntityNotFoundException(USER_NOT_FOUND)
         );
-        if (userUpdateDetailsDto.firstName() != null) {
-            userDto.setFirstName(userUpdateDetailsDto.firstName());
-        }
-        if (userUpdateDetailsDto.lastName() != null) {
-            userDto.setLastName(userUpdateDetailsDto.lastName());
-        }
+        userMapper.mapToUpdatedUser(userDto, userUpdateDetailsDto);
         return userMapper.toDto(userRepository.save(userDto));
     }
 
