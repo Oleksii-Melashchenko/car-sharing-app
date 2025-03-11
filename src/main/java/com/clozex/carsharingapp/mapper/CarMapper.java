@@ -21,10 +21,20 @@ public interface CarMapper {
 
     Car toEntity(CarCreateRequestDto carCreateRequestDto);
 
-    @Mapping(target = "model", source = "updateDetailsDto.model", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "brand", source = "updateDetailsDto.brand", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "type", expression = "java(updateDetailsDto.type() != null ? Car.CarType.valueOf(updateDetailsDto.type()) : existingCar.getType())")
-    @Mapping(target = "inventory", source = "updateDetailsDto.inventory", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "dailyFee", source = "updateDetailsDto.dailyFee", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "model",
+            source = "updateDetailsDto.model",
+            nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "brand",
+            source = "updateDetailsDto.brand",
+            nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "type",
+            expression = "java(updateDetailsDto.type() != null ? Car.CarType"
+                    + ".valueOf(updateDetailsDto.type()) : existingCar.getType())")
+    @Mapping(target = "inventory",
+            source = "updateDetailsDto.inventory",
+            nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "dailyFee",
+            source = "updateDetailsDto.dailyFee",
+            nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateCarFromDto(CarUpdateRequestDto updateDetailsDto, @MappingTarget Car existingCar);
 }

@@ -47,7 +47,8 @@ public class CarController {
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
-    public CarDetailedResponseDto createCar(@RequestBody @Valid CarCreateRequestDto carCreateRequestDto) {
+    public CarDetailedResponseDto createCar(@RequestBody
+                                                @Valid CarCreateRequestDto carCreateRequestDto) {
         return carService.createCar(carCreateRequestDto);
     }
 
@@ -55,7 +56,8 @@ public class CarController {
     @PatchMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public CarDetailedResponseDto updateCar(@PathVariable Long id,
-                                            @RequestBody @Valid CarUpdateRequestDto carUpdateRequestDto) {
+                                            @RequestBody
+                                            @Valid CarUpdateRequestDto carUpdateRequestDto) {
         return carService.updateCar(id, carUpdateRequestDto);
     }
 
