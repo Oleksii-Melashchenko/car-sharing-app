@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class UserServiceImpl implements UserService {
     private static final String USER_NOT_FOUND = "User not found";
     private static final String ROLE_NOT_FOUND = "Role not found";
@@ -29,6 +28,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
+    @Transactional
     public UserRegisterResponseDto register(UserRegistrationRequestDto requestDto)
             throws RegistrationException {
         String email = requestDto.email();
