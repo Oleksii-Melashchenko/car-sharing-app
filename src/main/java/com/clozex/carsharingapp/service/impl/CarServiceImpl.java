@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CarServiceImpl implements CarService {
+    private static final String CAR_NOT_FOUND = "Car not found";
     private final CarRepository carRepository;
     private final CarMapper carMapper;
 
@@ -29,7 +30,7 @@ public class CarServiceImpl implements CarService {
     @Override
     public CarDetailedResponseDto getCarDetails(Long id) {
         return carMapper.toDetailedDto(carRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Car not found")
+                () -> new EntityNotFoundException(CAR_NOT_FOUND)
         ));
     }
 
@@ -42,7 +43,7 @@ public class CarServiceImpl implements CarService {
     @Override
     public CarDetailedResponseDto updateCar(Long id, CarUpdateRequestDto carUpdateRequestDto) {
         Car car = carRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Car not found")
+                () -> new EntityNotFoundException(CAR_NOT_FOUND)
         );
         carMapper.updateCarFromDto(carUpdateRequestDto, car);
         return carMapper.toDetailedDto(carRepository.save(car));
